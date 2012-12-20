@@ -9,55 +9,55 @@ One drawback though is that the nested class also needs to inherit from JSONable
 
 Example: 
 
-module JSONTest
-  class TestXX < JSONable
-    attr_reader :a
+    module JSONTest
+      class TestXX < JSONable
+        attr_reader :a
 
-    def initialize a
-      @a = a
+        def initialize a
+          @a = a
+        end
+      end
+    
+      class TestX < JSONable
+        attr_reader :a
+        attr_reader :b
+        def initialize
+          @a = "So what"
+          @b = "I am nested"
+          @c = TestXX.new [
+            "Ruby",
+            "Kicks",
+            "Ass"
+          ]
+    
+          # this will crash :-(
+          #@d = [] 
+          #(0..1).each { |i|
+          #  @d << TestXX.new(i)
+          #}
+        end
+      end
+    
+      class Test < JSONable
+        attr_reader :a
+        attr_reader :b
+        attr_reader :c
+        def initialize
+          @a = "Hello World"
+          @b = 500
+          @c = [
+            "Arg1",
+            "Arg2",
+            "Arg3"
+          ]
+          @d = TestX.new
+        end
+      end
     end
-  end
 
-  class TestX < JSONable
-    attr_reader :a
-    attr_reader :b
-    def initialize
-      @a = "So what"
-      @b = "I am nested"
-      @c = TestXX.new [
-        "Ruby",
-        "Kicks",
-        "Ass"
-      ]
-
-      # this will crash :-(
-      #@d = [] 
-      #(0..1).each { |i|
-      #  @d << TestXX.new(i)
-      #}
-    end
-  end
-
-  class Test < JSONable
-    attr_reader :a
-    attr_reader :b
-    attr_reader :c
-    def initialize
-      @a = "Hello World"
-      @b = 500
-      @c = [
-        "Arg1",
-        "Arg2",
-        "Arg3"
-      ]
-      @d = TestX.new
-    end
-  end
-end
-
-test = JSONTest::Test.new
-puts test.to_json
+    test = JSONTest::Test.new
+    puts test.to_json
 
 Output:
 
-{"a":"Hello World","b":"500","c":["Arg1","Arg2","Arg3"],"d":{"a":"So what","b":"I am nested","c":{"a":["Ruby","Kicks","Ass"]}}}
+    {"a":"Hello World","b":"500","c":["Arg1","Arg2","Arg3"],"d":{"a":"So what","b":"I am nested","c":{"a":["Ruby","Kicks","Ass"]}}}
