@@ -2,21 +2,21 @@
 # Initially taken from: http://stackoverflow.com/a/4464721/962890
 #
 # Improved it by supporting nested classes 
-class JSONable
+module JSONable
   def to_hash
     hash = {}
-    instance_variables.each do |var|
+    self.instance_variables.each do |var|
       hashify hash, var
     end
     hash
   end
 
-  def to_json
+  def to_json(*a)
     hash = {}
     self.instance_variables.each do |var|
       hashify hash, var
     end
-    hash.to_json
+    JSON.pretty_generate hash
   end
 
   #def from_json! string
